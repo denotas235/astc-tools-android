@@ -22,7 +22,8 @@ jobs:
     - name: Install tools
       run: |
         sudo apt-get update
-        sudo apt-get install -y curl unzip jq rsync zip
+        sudo apt-get install -y curl unzip jq rsync zip python3-pip
+        pip install pillow
 
     - name: Download Minecraft 1.21.11 client + assets
       run: |
@@ -37,10 +38,6 @@ jobs:
         unzip -q client.jar "assets/minecraft/textures/*" -d assets_raw
 
     - name: Sort textures
-    - name: Normalize PNGs
-      run: |
-        chmod +x pipeline/normalize_pngs.sh
-        ./pipeline/normalize_pngs.sh
       run: |
         mkdir -p sorted/gui sorted/block sorted/item sorted/environment sorted/skin
         rsync -a workspace/assets_raw/assets/minecraft/textures/gui/ sorted/gui/ || true
@@ -49,6 +46,22 @@ jobs:
         rsync -a workspace/assets_raw/assets/minecraft/textures/environment/ sorted/environment/ || true
         find workspace/assets_raw/assets/minecraft/textures/entity -maxdepth 1 -type f -name "*steve*.png" -exec cp {} sorted/skin/ \;
         find workspace/assets_raw/assets/minecraft/textures/entity -maxdepth 1 -type f -name "*alex*.png" -exec cp {} sorted/skin/ \;
+
+    - name: Normalize PNGs to RGBA
+      run: |
+        find sorted/ -name "*.png" | while read f; do
+          python3 - <<PY
+from PIL import Image
+import sys
+path = sys.argv[1]
+try:
+    img = Image.open(path).convert("RGBA")
+    img.save(path)
+except Exception as e:
+    print("ERROR:", path, e)
+PY
+          "$f"
+        done
 
     - name: Build ASTC encoder
       run: |
