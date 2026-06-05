@@ -37,6 +37,10 @@ jobs:
         unzip -q client.jar "assets/minecraft/textures/*" -d assets_raw
 
     - name: Sort textures
+    - name: Normalize PNGs
+      run: |
+        chmod +x pipeline/normalize_pngs.sh
+        ./pipeline/normalize_pngs.sh
       run: |
         mkdir -p sorted/gui sorted/block sorted/item sorted/environment sorted/skin
         rsync -a workspace/assets_raw/assets/minecraft/textures/gui/ sorted/gui/ || true
