@@ -55,7 +55,7 @@ jobs:
         cmake .. -DCMAKE_BUILD_TYPE=Release
         make -j$(nproc)
         cd ../..
-        cp astc-encoder/build/Source/astcenc astcenc
+        cp astc-encoder/build/Source/astcenc-native astcenc
 
     - name: Convert textures to ASTC
       run: |
