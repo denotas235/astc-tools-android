@@ -3,7 +3,7 @@ set -e
 
 SRC="$1"
 OUT="$2"
-ASTCENC="$(pwd)/astcenc"
+ASTCENC="$(dirname "$0")/../astcenc"
 
 mkdir -p "$OUT/assets/minecraft/textures/gui"
 mkdir -p "$OUT/assets/minecraft/textures/block"
