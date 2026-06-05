@@ -38,14 +38,20 @@ jobs:
           -DASTCENC_ISA_NATIVE=OFF
         make -j$(nproc)
 
+    - name: Copy binaries to repo root
+      run: |
+        cp astc-encoder/build-android/Source/astcenc .
+        cp astc-encoder/build-android/Source/astcdec .
+        cp astc-encoder/build-android/Source/astcinfo .
+
     - name: Upload binaries to workflow artifacts
       uses: actions/upload-artifact@v4
       with:
         name: astc-tools-android-arm64
         path: |
-          astc-encoder/build-android/Source/astcenc
-          astc-encoder/build-android/Source/astcdec
-          astc-encoder/build-android/Source/astcinfo
+          astcenc
+          astcdec
+          astcinfo
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
@@ -53,8 +59,8 @@ jobs:
         tag_name: android-arm64-build
         name: Android ARM64 Build
         files: |
-          astc-encoder/build-android/Source/astcenc
-          astc-encoder/build-android/Source/astcdec
-          astc-encoder/build-android/Source/astcinfo
+          astcenc
+          astcdec
+          astcinfo
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
