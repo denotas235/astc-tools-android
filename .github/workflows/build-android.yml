@@ -11,7 +11,7 @@ jobs:
 
     steps:
     - name: Checkout this repo
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Clone ASTC Encoder source
       run: |
@@ -37,7 +37,7 @@ jobs:
         make -j$(nproc)
 
     - name: Upload binaries to workflow artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: astc-tools-android-arm64
         path: |
@@ -46,7 +46,7 @@ jobs:
           astc-encoder/build-android/Source/astcinfo
 
     - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: android-arm64-build
         name: Android ARM64 Build
